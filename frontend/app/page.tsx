@@ -50,19 +50,24 @@ export default function Home() {
 
   return (
    <section className="pt-17">
-       <h2>websocket chat</h2>
-       <div>
+       <h2 className={"text-xl mb-5"}>Websocket Chat</h2>
+       <div className={"flex gap-4 mb-5"}>
            <input
+               className={"border border-gray-200 rounded-lg px-2 py-1"}
                type="text"
                value={input}
                onChange={(e) => setInput(e.target.value)}
                placeholder="Enter your message"
            />
-           <button onClick={sendMessage}>Send</button>
+           <button
+               className={"border border-gray-200 rounded-lg px-2 py-1"}
+               onClick={sendMessage}>Send</button>
        </div>
 
-       <div>
-           {messages && messages.map(msg => <div key={msg}>
+       <div className={"flex flex-col gap-4 mb-5"}>
+           {messages && messages.map(msg => <div
+               className={"border border-gray-200 rounded-lg px-2 py-1"}
+               key={msg}>
                {msg}
            </div>)}
        </div>
