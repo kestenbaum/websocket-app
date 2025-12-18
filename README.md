@@ -8,8 +8,7 @@ Features
 * User Tracking: Backend state management using Map to track active connections and user metadata.
 * Responsive UI: A clean chat interface built with React and Tailwind CSS.
 
-  
-Tech Stack
+
 Backend
 * Runtime: Node.js
 * Language: TypeScript
