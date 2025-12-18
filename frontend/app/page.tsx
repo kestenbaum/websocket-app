@@ -8,14 +8,22 @@ type ChatMessage = {
     timestamp?: string;
 }
 
+type UserDataType = {
+    name: string;
+    room: string;
+    joined: boolean;
+}
+
 export default function Home() {
     const socketRef = useRef<WebSocket | null>(null);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState("");
 
-    const [name, setName] = useState("");
-    const [room, setRoom] = useState("general");
-    const [joined, setJoined] = useState(false);
+    const [user, setUser] = useState<UserDataType>({
+        name: "",
+        room: "general",
+        joined: false,
+    });
 
     useEffect(() => {
         const socket = new WebSocket("ws://localhost:4000/ws");
@@ -35,14 +43,14 @@ export default function Home() {
     }, []);
 
     const joinChat = () => {
-        if (!name.trim() || !room.trim()) return;
+        if (!user.name.trim() || !user.room.trim()) return;
 
         socketRef.current?.send(JSON.stringify({
             type: "join",
-            name: name,
-            room: room
+            name: user.name,
+            room: user.room,
         }));
-        setJoined(true);
+        setUser({ ...user, joined: true });
     };
 
     const sendMessage = () => {
@@ -57,21 +65,21 @@ export default function Home() {
         setInput("");
     };
 
-    if (!joined) {
+    if (!user.joined) {
         return (
             <section className="pt-20 flex flex-col gap-4 max-w-md">
                 <h2 className="text-2xl font-bold">Chat</h2>
                 <input
                     className="border p-2 rounded"
                     placeholder="Your name"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
+                    value={user.name}
+                    onChange={e => setUser({...user, name: e.target.value})}
                 />
                 <input
                     className="border p-2 rounded"
                     placeholder="Room name"
-                    value={room}
-                    onChange={e => setRoom(e.target.value)}
+                    value={user.room}
+                    onChange={e => setUser({...user, room: e.target.value})}
                 />
                 <button className="bg-blue-500 text-white p-2 rounded" onClick={joinChat}>
                     Join
@@ -82,7 +90,7 @@ export default function Home() {
 
     return (
         <section className="pt-20">
-            <h2 className="text-xl mb-5 font-bold">Chat: {room} (me: {name})</h2>
+            <h2 className="text-xl mb-5 font-bold">Chat: {user.room} (me: {user.name})</h2>
 
             <div className="flex gap-4 mb-5">
                 <input
